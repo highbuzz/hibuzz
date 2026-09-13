@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HiBuzz | Medical Dispensary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black: #090b09;
+    --panel: #0f130f;
+    --green-deep: #143a1c;
+    --green: #4caf50;
+    --green-bright: #8fe388;
+    --line: rgba(143,227,136,0.18);
+    --text: #eef5ec;
+    --text-dim: #9db29b;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ scroll-snap-type: y mandatory; scroll-behavior:smooth; }
+  body{
+    background:var(--black);
+    color:var(--text);
+    font-family:'Work Sans', sans-serif;
+    overflow-x:hidden;
+  }
+
+  /* ---- brand logo: faded fixed watermark behind every section ---- */
+  .logo-watermark{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:0;
+    pointer-events:none;
+  }
+  .logo-watermark svg{
+    width:60vw;
+    max-width:420px;
+    opacity:0.07;
+    filter:grayscale(30%);
+  }
+
+  /* ---- hero logo badge with drifting smoke ---- */
+  .logo-badge{
+    position:relative;
+    width:168px;
+    height:168px;
+    margin-bottom:1.6rem;
+  }
+  .logo-badge svg{
+    position:relative;
+    z-index:3;
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    object-fit:cover;
+    filter: drop-shadow(0 0 30px rgba(143,227,136,0.25));
+  }
+  .smoke-wrap{
+    position:absolute;
+    inset:-80px;
+    z-index:2;
+    pointer-events:none;
+    overflow:visible;
+  }
+  .smoke{
+    position:absolute;
+    top:50%; left:50%;
+    width:130px;
+    height:170px;
+    margin:-85px 0 0 -65px;
+    background:radial-gradient(ellipse 55% 60% at 50% 55%, rgba(238,245,238,0.75) 0%, rgba(238,245,238,0.35) 40%, rgba(238,245,238,0) 72%);
+    filter:blur(3px);
+    mix-blend-mode:screen;
+    opacity:0;
+    will-change:transform, opacity;
+  }
+  .smoke.s1{ animation:rise1 8s ease-in infinite; }
+  .smoke.s2{ animation:rise2 9.5s ease-in infinite 2s; }
+  .smoke.s3{ animation:rise3 10.5s ease-in infinite 4s; }
+  .smoke.s4{ animation:rise1 9s ease-in infinite 5.2s; transform-origin:60% 80%; }
+  .smoke.s5{ animation:rise2 8.5s ease-in infinite 1.1s; }
+  .smoke.s6{ animation:rise3 11s ease-in infinite 3.3s; }
+
+  @keyframes rise1{
+    0%{ transform:translate(-10px,20px) scale(0.5) rotate(0deg); opacity:0; }
+    12%{ opacity:0.55; }
+    45%{ transform:translate(10px,-40px) scale(1) rotate(12deg); opacity:0.4; }
+    75%{ transform:translate(28px,-95px) scale(1.5) rotate(22deg); opacity:0.18; }
+    100%{ transform:translate(42px,-150px) scale(2) rotate(30deg); opacity:0; }
+  }
+  @keyframes rise2{
+    0%{ transform:translate(12px,20px) scale(0.5) rotate(0deg); opacity:0; }
+    12%{ opacity:0.5; }
+    45%{ transform:translate(-8px,-42px) scale(1.05) rotate(-14deg); opacity:0.38; }
+    75%{ transform:translate(-26px,-98px) scale(1.55) rotate(-24deg); opacity:0.16; }
+    100%{ transform:translate(-38px,-155px) scale(2.1) rotate(-30deg); opacity:0; }
+  }
+  @keyframes rise3{
+    0%{ transform:translate(0,25px) scale(0.45) rotate(0deg); opacity:0; }
+    12%{ opacity:0.48; }
+    45%{ transform:translate(16px,-38px) scale(0.95) rotate(10deg); opacity:0.34; }
+    75%{ transform:translate(6px,-90px) scale(1.45) rotate(18deg); opacity:0.15; }
+    100%{ transform:translate(-4px,-145px) scale(1.9) rotate(24deg); opacity:0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .smoke{ animation:none !important; opacity:0.15; }
+  }
+
+  section{
+    position:relative;
+    min-height:100vh;
+    scroll-snap-align:start;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:6vh 6vw;
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+
+  .glow{
+    position:absolute;
+    width:60vw; height:60vw;
+    max-width:700px; max-height:700px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(76,175,80,0.16) 0%, rgba(76,175,80,0) 70%);
+    pointer-events:none;
+  }
+
+  .content{ position:relative; z-index:2; width:100%; max-width:720px; text-align:center; }
+
+  .eyebrow-mark{
+    display:inline-block;
+    font-family:'Bebas Neue', sans-serif;
+    letter-spacing:0.14em;
+    color:var(--green-bright);
+    font-size:0.95rem;
+    margin-bottom:1.1rem;
+    opacity:0.85;
+  }
+
+  h1, h2{
+    font-family:'Bebas Neue', sans-serif;
+    line-height:0.95;
+    letter-spacing:0.01em;
+  }
+
+  h1{ font-size:clamp(2rem, 9vw, 4.4rem); color:var(--text); }
+  h2{ font-size:clamp(1.7rem, 7vw, 3.2rem); color:var(--text); margin-bottom:1.4rem; }
+
+  p.lead{
+    font-size:clamp(1rem, 2.4vw, 1.25rem);
+    color:var(--text-dim);
+    margin-top:1rem;
+    line-height:1.5;
+  }
+
+  /* ---- Section 1: Featured Strains ---- */
+  #s1 .strain-strip{
+    position:relative;
+    width:100%;
+    max-width:900px;
+    margin-top:2.4rem;
+  }
+  #s1 .strain-strip h4.strip-title{
+    font-family:'Bebas Neue', sans-serif;
+    letter-spacing:0.1em;
+    font-size:0.85rem;
+    color:var(--text-dim);
+    text-align:center;
+    margin-bottom:0.9rem;
+  }
+  #s1 .strain-track{
+    display:flex;
+    gap:0.9rem;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    padding:0.3rem 2.4rem;
+    scrollbar-width:none;
+  }
+  #s1 .strain-track::-webkit-scrollbar{ display:none; }
+  #s1 .strain-card{
+    flex:0 0 auto;
+    width:280px;
+    scroll-snap-align:center;
+    perspective:900px;
+    background:none;
+    border:none;
+    padding:0;
+  }
+  #s1 .card-inner{
+    position:relative;
+    width:100%;
+    height:280px;
+    transition:transform 0.5s ease, opacity 0.25s ease, box-shadow 0.25s ease;
+    transform-style:preserve-3d;
+    cursor:pointer;
+    opacity:0.72;
+    border-radius:14px;
+  }
+  #s1 .strain-card:hover .card-inner,
+  #s1 .card-inner:focus-visible{ opacity:1; }
+  #s1 .card-inner.flipped{ transform:rotateY(180deg); }
+  #s1 .card-face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    border:1px solid var(--line);
+    border-radius:14px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:1.1rem 0.7rem 0.9rem;
+    text-align:center;
+  }
+  #s1 .card-face.front{
+    background-color:var(--panel);
+    background-image:radial-gradient(circle at 50% 30%, rgba(143,227,136,0.22), transparent 70%);
+    background-size:cover;
+    background-position:center;
+    justify-content:flex-end;
+  }
+  #s1 .card-face.front .strain-name{ font-size:0.88rem; font-weight:600; color:var(--text); line-height:1.25; margin-bottom:0.4rem; text-shadow:0 1px 4px rgba(0,0,0,0.7); }
+
+  #s1 .card-face.back{
+    transform:rotateY(180deg);
+    background-color:var(--green-deep);
+    background-size:cover;
+    background-position:center;
+    overflow:hidden;
+    justify-content:flex-end;
+  }
+  #s1 .card-face.back .back-name{
+    position:relative; z-index:2;
+    font-size:0.78rem;
+    font-weight:700;
+    color:var(--text);
+    margin-bottom:0.5rem;
+    text-shadow:0 1px 4px rgba(0,0,0,0.6);
+  }
+  #s1 .price-row{
+    position:relative; z-index:2;
+    display:flex;
+    justify-content:center;
+    width:100%;
+  }
+  #s1 .price-pill{
+    background:rgba(9,11,9,0.65);
+    border:1px solid rgba(143,227,136,0.35);
+    border-radius:999px;
+    padding:0.35rem 1.1rem;
+  }
+  #s1 .price-pill .qty{ display:inline; font-size:0.6rem; color:var(--text-dim); letter-spacing:0.04em; margin-right:0.35rem; }
+  #s1 .price-pill .price{ display:inline; font-size:0.95rem; font-weight:700; color:var(--green-bright); }
+
+  #s1 .strip-nav{
+    position:absolute;
+    top:calc(50% + 0.5rem);
+    transform:translateY(-50%);
+    background:rgba(9,11,9,0.75);
+    border:1px solid var(--line);
+    color:var(--green-bright);
+    width:34px; height:34px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    z-index:3;
+    font-size:1.5rem;
+  }
+  #s1 .strip-nav.prev{ left:-4px; }
+  #s1 .strip-nav.next{ right:-4px; }
+  #s1 .strip-nav:hover{ border-color:var(--green); }
+
+  .scroll-cue{
+    position:relative;
+    margin-top:2.2rem;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0.5rem;
+    color:var(--text-dim);
+    font-size:0.8rem;
+    letter-spacing:0.08em;
+  }
+  .scroll-cue svg{ animation:bob 1.8s ease-in-out infinite; }
+  @keyframes bob{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(8px); }
+  }
+
+  /* ---- Section 2: Help / Search ---- */
+  #s2 .search-box{
+    margin-top:2.6rem;
+    width:100%;
+    max-width:520px;
+    display:flex;
+    border:2px solid var(--green);
+    border-radius:999px;
+    background:rgba(255,255,255,0.02);
+    overflow:hidden;
+  }
+  #s2 .search-box input{
+    flex:1;
+    background:transparent;
+    border:none;
+    outline:none;
+    padding:1rem 1.4rem;
+    color:var(--text);
+    font-family:'Work Sans', sans-serif;
+    font-size:1rem;
+  }
+  #s2 .search-box input::placeholder{ color:var(--text-dim); }
+  #s2 .search-box button{
+    background:var(--green);
+    border:none;
+    color:#06170a;
+    font-weight:700;
+    padding:0 1.6rem;
+    cursor:pointer;
+    font-size:0.95rem;
+  }
+  #s2 .search-box button:hover{ background:var(--green-bright); }
+
+  /* ---- Section 3: Choice cards ---- */
+  .choice-row{
+    display:flex;
+    gap:1.1rem;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin-top:2.6rem;
+    width:100%;
+  }
+  .choice-card{
+    flex:1 1 200px;
+    max-width:280px;
+    border:1px solid var(--line);
+    background:var(--panel);
+    border-radius:14px;
+    padding:2rem 1.4rem;
+    cursor:pointer;
+    transition:border-color 0.2s ease, transform 0.2s ease;
+    text-align:left;
+  }
+  .choice-card:hover{ border-color:var(--green); transform:translateY(-4px); }
+  .choice-card h3{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:1.6rem;
+    color:var(--green-bright);
+    margin-bottom:0.5rem;
+    letter-spacing:0.02em;
+  }
+  .choice-card p{ color:var(--text-dim); font-size:0.9rem; line-height:1.45; }
+
+  /* ---- Section 4: Form ---- */
+  #s4 form{
+    width:100%;
+    max-width:520px;
+    text-align:left;
+    display:flex;
+    flex-direction:column;
+    gap:1.6rem;
+    margin-top:2.2rem;
+  }
+  .field label{
+    display:block;
+    font-size:0.9rem;
+    color:var(--text);
+    margin-bottom:0.6rem;
+    font-weight:500;
+  }
+  .field select,
+  .field input,
+  .field textarea{
+    width:100%;
+    background:transparent;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:1rem;
+    color:var(--text);
+    font-family:'Work Sans', sans-serif;
+    font-size:0.95rem;
+    outline:none;
+  }
+  .field select:focus,
+  .field input:focus,
+  .field textarea:focus{ 
+    border-color:var(--green);
+    box-shadow:0 0 12px rgba(76,175,80,0.2);
+  }
+  .field textarea{ 
+    resize:vertical; 
+    min-height:100px;
+  }
+
+  .submit-btn{
+    margin-top:0.8rem;
+    background:var(--green);
+    color:#06170a;
+    border:none;
+    border-radius:999px;
+    padding:1.1rem;
+    font-weight:700;
+    font-size:1rem;
+    cursor:pointer;
+    transition:background 0.2s ease;
+  }
+  .submit-btn:hover{ background:var(--green-bright); }
+
+  .foot-note{
+    margin-top:1.2rem;
+    font-size:0.8rem;
+    color:var(--text-dim);
+    text-align:center;
+    line-height:1.5;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .scroll-cue svg{ animation:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="logo-watermark">
+  <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="100" r="95" fill="none" stroke="#4caf50" stroke-width="2" opacity="0.1"/>
+    <text x="100" y="110" font-size="48" font-weight="bold" text-anchor="middle" fill="#4caf50" opacity="0.05" font-family="Arial">HiBuzz</text>
+  </svg>
+</div>
+
+<!-- Section 1: Featured Strains Hero -->
+<section id="s1">
+  <div class="glow"></div>
+  <div class="content">
+    <div class="logo-badge">
+      <div class="smoke-wrap">
+        <div class="smoke s1"></div>
+        <div class="smoke s2"></div>
+        <div class="smoke s3"></div>
+        <div class="smoke s4"></div>
+        <div class="smoke s5"></div>
+        <div class="smoke s6"></div>
+      </div>
+      <svg width="168" height="168" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+        <defs>
+          <linearGradient id="hibuzzGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#000;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <circle cx="100" cy="100" r="95" fill="url(#hibuzzGrad)" stroke="#8fe388" stroke-width="3"/>
+        <circle cx="100" cy="100" r="88" fill="none" stroke="#4caf50" stroke-width="1" opacity="0.4"/>
+        
+        <!-- Outer text ring -->
+        <defs>
+          <path id="outerCircle" d="M 100, 100 m -85, 0 a 85,85 0 1,1 170,0 a 85,85 0 1,1 -170,0" fill="none"/>
+        </defs>
+        <text font-family="Bebas Neue, sans-serif" font-size="16" font-weight="bold" fill="#8fe388" letter-spacing="4" opacity="0.9">
+          <textPath href="#outerCircle" startOffset="0%" text-anchor="start">
+            100% NATURAL PRODUCT
+          </textPath>
+        </text>
+        
+        <!-- Center text -->
+        <text x="100" y="90" font-size="56" font-weight="bold" text-anchor="middle" fill="#8fe388" font-family="Bebas Neue, sans-serif">Hi</text>
+        <text x="100" y="125" font-size="56" font-style="italic" text-anchor="middle" fill="#ffffff" font-family="Trebuchet MS, sans-serif">Buzz</text>
+        
+        <!-- Leaf icon -->
+        <g transform="translate(100, 70)">
+          <path d="M 0,-8 Q 3,-4 3,0 Q 3,4 0,8 Q -3,4 -3,0 Q -3,-4 0,-8" fill="#8fe388"/>
+          <line x1="0" y1="-8" x2="0" y2="8" stroke="#8fe388" stroke-width="0.5"/>
+        </g>
+        
+        <!-- Cannabis text -->
+        <text x="100" y="145" font-size="12" font-weight="bold" text-anchor="middle" fill="#8fe388" font-family="Bebas Neue, sans-serif" letter-spacing="2">CANNABIS</text>
+        
+        <!-- Bottom text ring -->
+        <defs>
+          <path id="innerCircle" d="M 100, 100 m -70, 0 a 70,70 0 1,0 140,0 a 70,70 0 1,0 -140,0" fill="none"/>
+        </defs>
+        <text font-family="Bebas Neue, sans-serif" font-size="13" font-weight="bold" fill="#8fe388" letter-spacing="2" opacity="0.8">
+          <textPath href="#innerCircle" startOffset="50%" text-anchor="middle">
+            Medical dispensary
+          </textPath>
+        </text>
+      </svg>
+    </div>
+
+    <h4 class="eyebrow-mark">FEATURED STRAINS</h4>
+
+    <div class="strain-strip">
+      <div class="strain-track" id="strainTrack">
+        <!-- Strain Card 1 -->
+        <div class="strain-card">
+          <div class="card-inner">
+            <div class="card-face front">
+              <div class="strain-name">Blue Cheese</div>
+            </div>
+            <div class="card-face back">
+              <div class="back-name">Blue Cheese</div>
+              <div class="price-row">
+                <div class="price-pill">
+                  <span class="qty">per</span>
+                  <span class="qty">gram</span>
+                  <span class="price">R25</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Strain Card 2 -->
+        <div class="strain-card">
+          <div class="card-inner">
+            <div class="card-face front">
+              <span class="strain-tag" style="background:#7bd6c9; color:#000; margin-bottom:0.5rem;">HYBRID</span>
+              <div class="strain-name">Sour Grape</div>
+            </div>
+            <div class="card-face back">
+              <div class="back-name">Sour Grape</div>
+              <div class="price-row">
+                <div class="price-pill">
+                  <span class="qty">per</span>
+                  <span class="qty">gram</span>
+                  <span class="price">R40</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Strain Card 3 -->
+        <div class="strain-card">
+          <div class="card-inner">
+            <div class="card-face front">
+              <span class="strain-tag" style="background:#7bd6c9; color:#000; margin-bottom:0.5rem;">HYBRID</span>
+              <div class="strain-name">Orange Cream Cake</div>
+            </div>
+            <div class="card-face back">
+              <div class="back-name">Orange Cream Cake</div>
+              <div class="price-row">
+                <div class="price-pill">
+                  <span class="qty">per</span>
+                  <span class="qty">gram</span>
+                  <span class="price">R40</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Strain Card 4 -->
+        <div class="strain-card">
+          <div class="card-inner">
+            <div class="card-face front">
+              <span class="strain-tag" style="background:#7bd6c9; color:#000; margin-bottom:0.5rem;">HYBRID</span>
+              <div class="strain-name">Dutch Treat</div>
+            </div>
+            <div class="card-face back">
+              <div class="back-name">Dutch Treat</div>
+              <div class="price-row">
+                <div class="price-pill">
+                  <span class="qty">per</span>
+                  <span class="qty">gram</span>
+                  <span class="price">R50</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Strain Card 5 -->
+        <div class="strain-card">
+          <div class="card-inner">
+            <div class="card-face front">
+              <span class="strain-tag" style="background:#7bd6c9; color:#000; margin-bottom:0.5rem;">HYBRID</span>
+              <div class="strain-name">Gorilla Glue</div>
+            </div>
+            <div class="card-face back">
+              <div class="back-name">Gorilla Glue</div>
+              <div class="price-row">
+                <div class="price-pill">
+                  <span class="qty">per</span>
+                  <span class="qty">gram</span>
+                  <span class="price">R45</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="strip-nav prev" onclick="scrollStrains(-1)">‹</button>
+      <button class="strip-nav next" onclick="scrollStrains(1)">›</button>
+    </div>
+
+    <div class="scroll-cue">
+      <span>SCROLL</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- Section 2: Help & Search -->
+<section id="s2">
+  <div class="glow"></div>
+  <div class="content">
+    <span class="eyebrow-mark">GREEN ROOM</span>
+    <h2>How can we help you?</h2>
+    <p class="lead">Tell us what you're after and we'll point you to it.</p>
+    
+    <div class="search-box">
+      <input type="text" placeholder="What are you looking for?">
+      <button>Search</button>
+    </div>
+
+    <div class="scroll-cue">
+      <span>SCROLL</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- Section 3: Choice Cards -->
+<section id="s3">
+  <div class="glow"></div>
+  <div class="content">
+    <h2>Indica, Sativa, or something specific?</h2>
+    <p class="lead">Pick a starting point — we'll narrow it down from there.</p>
+    
+    <div class="choice-row">
+      <div class="choice-card">
+        <h3>Indica</h3>
+        <p>Slower, heavier, built for winding down.</p>
+      </div>
+      <div class="choice-card">
+        <h3>Sativa</h3>
+        <p>Brighter, energizing, built for daytime.</p>
+      </div>
+      <div class="choice-card">
+        <h3>I know the name</h3>
+        <p>Already have a strain or product in mind.</p>
+      </div>
+    </div>
+
+    <div class="scroll-cue">
+      <span>SCROLL</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- Section 4: Contact Form -->
+<section id="s4">
+  <div class="glow"></div>
+  <div class="content">
+    <h2>Let's find it for you</h2>
+    <p class="lead">Fill this in and we'll get back to you with what's in stock.</p>
+    
+    <form id="hibuzzForm">
+      <div class="field">
+        <label for="strainType">What are you looking for?</label>
+        <select id="strainType" required>
+          <option value="">Select type...</option>
+          <option value="indica">Indica</option>
+          <option value="sativa">Sativa</option>
+          <option value="hybrid">Hybrid</option>
+          <option value="specific">Something specific</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="strainName">Strain or product name (if known)</label>
+        <input type="text" id="strainName" placeholder="e.g. Blue Dream">
+      </div>
+
+      <div class="field">
+        <label for="moreInfo">Tell us more</label>
+        <textarea id="moreInfo" placeholder="What effect, flavor, or format are you after?"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="userName">Your name</label>
+        <input type="text" id="userName" required>
+      </div>
+
+      <div class="field">
+        <label for="userMobile">Mobile number</label>
+        <input type="tel" id="userMobile" placeholder="+27..." required>
+      </div>
+
+      <button type="button" class="submit-btn" onclick="sendViaWhatsApp()">Send my request via WhatsApp</button>
+      
+      <p class="foot-note">21+ only. Tapping send opens WhatsApp with your details already filled in — just hit send there to reach us.</p>
+    </form>
+  </div>
+</section>
+
+<script>
+  // Strain carousel scroll function
+  function scrollStrains(direction) {
+    const track = document.getElementById('strainTrack');
+    const scrollAmount = 300;
+    track.scrollBy({
+      left: direction * scrollAmount,
+      behavior: 'smooth'
+    });
+  }
+
+  // Strain card flip on click
+  document.querySelectorAll('.strain-card').forEach(card => {
+    card.addEventListener('click', function() {
+      const inner = this.querySelector('.card-inner');
+      inner.classList.toggle('flipped');
+    });
+  });
+
+  // WhatsApp integration
+  function sendViaWhatsApp() {
+    const name = document.getElementById('userName').value;
+    const mobile = document.getElementById('userMobile').value;
+    const strainType = document.getElementById('strainType').value;
+    const strainName = document.getElementById('strainName').value;
+    const moreInfo = document.getElementById('moreInfo').value;
+
+    if (!name || !mobile) {
+      alert('Please fill in your name and mobile number.');
+      return;
+    }
+
+    // Verify age (21+)
+    const confirmed = confirm('By proceeding, you confirm you are 21 years or older.');
+    if (!confirmed) return;
+
+    // Build message
+    let message = `Hi HiBuzz! I'd like to inquire about cannabis products.\n\n`;
+    message += `Name: ${name}\n`;
+    message += `Mobile: ${mobile}\n`;
+    if (strainType) message += `Looking for: ${strainType}\n`;
+    if (strainName) message += `Strain: ${strainName}\n`;
+    if (moreInfo) message += `Additional info: ${moreInfo}\n`;
+
+    // Encode and open WhatsApp
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappURL = `https://wa.me/?text=${encodedMessage}`;
+    window.open(whatsappURL, '_blank');
+  }
+</script>
+
+</body>
+</html>
