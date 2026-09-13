@@ -714,6 +714,9 @@
 </section>
 
 <script>
+  // HiBuzz WhatsApp number
+  const HIBUZZ_WHATSAPP = '27842977786';
+
   // Strain carousel scroll function
   function scrollStrains(direction) {
     const track = document.getElementById('strainTrack');
@@ -750,16 +753,16 @@
     if (!confirmed) return;
 
     // Build message
-    let message = `Hi HiBuzz! I'd like to inquire about cannabis products.\n\n`;
-    message += `Name: ${name}\n`;
-    message += `Mobile: ${mobile}\n`;
-    if (strainType) message += `Looking for: ${strainType}\n`;
-    if (strainName) message += `Strain: ${strainName}\n`;
-    if (moreInfo) message += `Additional info: ${moreInfo}\n`;
+    let message = `Hi HiBuzz! I'd like to inquire about cannabis products.\\n\\n`;
+    message += `Name: ${name}\\n`;
+    message += `Mobile: ${mobile}\\n`;
+    if (strainType) message += `Looking for: ${strainType}\\n`;
+    if (strainName) message += `Strain: ${strainName}\\n`;
+    if (moreInfo) message += `Additional info: ${moreInfo}\\n`;
 
-    // Encode and open WhatsApp
+    // Encode and send to HiBuzz WhatsApp
     const encodedMessage = encodeURIComponent(message);
-    const whatsappURL = `https://wa.me/?text=${encodedMessage}`;
+    const whatsappURL = `https://wa.me/${HIBUZZ_WHATSAPP}?text=${encodedMessage}`;
     window.open(whatsappURL, '_blank');
   }
 </script>
