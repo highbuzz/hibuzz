@@ -155,22 +155,25 @@
   /* ---- hero logo badge with drifting smoke ---- */
   .logo-badge{
     position:relative;
-    width:168px;
-    height:168px;
-    margin-bottom:1.6rem;
+    width:200px;
+    height:200px;
+    margin-bottom:2rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
-  .logo-badge svg{
+  .logo-badge img{
     position:relative;
     z-index:3;
     width:100%;
     height:100%;
     border-radius:50%;
-    object-fit:cover;
-    filter: drop-shadow(0 0 30px rgba(143,227,136,0.25));
+    object-fit:contain;
+    box-shadow:0 0 40px rgba(143,227,136,0.35), 0 0 80px rgba(76,175,80,0.15);
   }
   .smoke-wrap{
     position:absolute;
-    inset:-80px;
+    inset:-100px;
     z-index:2;
     pointer-events:none;
     overflow:visible;
@@ -178,11 +181,11 @@
   .smoke{
     position:absolute;
     top:50%; left:50%;
-    width:130px;
-    height:170px;
-    margin:-85px 0 0 -65px;
-    background:radial-gradient(ellipse 55% 60% at 50% 55%, rgba(238,245,238,0.75) 0%, rgba(238,245,238,0.35) 40%, rgba(238,245,238,0) 72%);
-    filter:blur(3px);
+    width:150px;
+    height:200px;
+    margin:-100px 0 0 -75px;
+    background:radial-gradient(ellipse 60% 65% at 50% 55%, rgba(238,245,238,0.8) 0%, rgba(238,245,238,0.4) 35%, rgba(238,245,238,0) 68%);
+    filter:blur(4px);
     mix-blend-mode:screen;
     opacity:0;
     will-change:transform, opacity;
@@ -195,29 +198,29 @@
   .smoke.s6{ animation:rise3 11s ease-in infinite 3.3s; }
 
   @keyframes rise1{
-    0%{ transform:translate(-10px,20px) scale(0.5) rotate(0deg); opacity:0; }
-    12%{ opacity:0.55; }
-    45%{ transform:translate(10px,-40px) scale(1) rotate(12deg); opacity:0.4; }
-    75%{ transform:translate(28px,-95px) scale(1.5) rotate(22deg); opacity:0.18; }
-    100%{ transform:translate(42px,-150px) scale(2) rotate(30deg); opacity:0; }
+    0%{ transform:translate(-15px,30px) scale(0.6) rotate(0deg); opacity:0; }
+    12%{ opacity:0.6; }
+    45%{ transform:translate(15px,-50px) scale(1.1) rotate(12deg); opacity:0.45; }
+    75%{ transform:translate(35px,-120px) scale(1.6) rotate(22deg); opacity:0.2; }
+    100%{ transform:translate(50px,-180px) scale(2.2) rotate(30deg); opacity:0; }
   }
   @keyframes rise2{
-    0%{ transform:translate(12px,20px) scale(0.5) rotate(0deg); opacity:0; }
-    12%{ opacity:0.5; }
-    45%{ transform:translate(-8px,-42px) scale(1.05) rotate(-14deg); opacity:0.38; }
-    75%{ transform:translate(-26px,-98px) scale(1.55) rotate(-24deg); opacity:0.16; }
-    100%{ transform:translate(-38px,-155px) scale(2.1) rotate(-30deg); opacity:0; }
+    0%{ transform:translate(15px,30px) scale(0.6) rotate(0deg); opacity:0; }
+    12%{ opacity:0.55; }
+    45%{ transform:translate(-12px,-52px) scale(1.15) rotate(-14deg); opacity:0.42; }
+    75%{ transform:translate(-32px,-125px) scale(1.65) rotate(-24deg); opacity:0.18; }
+    100%{ transform:translate(-48px,-185px) scale(2.3) rotate(-30deg); opacity:0; }
   }
   @keyframes rise3{
-    0%{ transform:translate(0,25px) scale(0.45) rotate(0deg); opacity:0; }
-    12%{ opacity:0.48; }
-    45%{ transform:translate(16px,-38px) scale(0.95) rotate(10deg); opacity:0.34; }
-    75%{ transform:translate(6px,-90px) scale(1.45) rotate(18deg); opacity:0.15; }
-    100%{ transform:translate(-4px,-145px) scale(1.9) rotate(24deg); opacity:0; }
+    0%{ transform:translate(0,35px) scale(0.55) rotate(0deg); opacity:0; }
+    12%{ opacity:0.52; }
+    45%{ transform:translate(20px,-48px) scale(1.05) rotate(10deg); opacity:0.38; }
+    75%{ transform:translate(8px,-115px) scale(1.55) rotate(18deg); opacity:0.16; }
+    100%{ transform:translate(-8px,-175px) scale(2.1) rotate(24deg); opacity:0; }
   }
 
   @media (prefers-reduced-motion: reduce){
-    .smoke{ animation:none !important; opacity:0.15; }
+    .smoke{ animation:none !important; opacity:0.2; }
   }
 
   section{
@@ -727,49 +730,7 @@
         <div class="smoke s5"></div>
         <div class="smoke s6"></div>
       </div>
-      <svg width="168" height="168" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="display:block;">
-        <defs>
-          <linearGradient id="hibuzzGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#000;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
-          </linearGradient>
-        </defs>
-        <circle cx="100" cy="100" r="95" fill="url(#hibuzzGrad)" stroke="#8fe388" stroke-width="3"/>
-        <circle cx="100" cy="100" r="88" fill="none" stroke="#4caf50" stroke-width="1" opacity="0.4"/>
-        
-        <!-- Outer text ring -->
-        <defs>
-          <path id="outerCircle" d="M 100, 100 m -85, 0 a 85,85 0 1,1 170,0 a 85,85 0 1,1 -170,0" fill="none"/>
-        </defs>
-        <text font-family="Bebas Neue, sans-serif" font-size="16" font-weight="bold" fill="#8fe388" letter-spacing="4" opacity="0.9">
-          <textPath href="#outerCircle" startOffset="0%" text-anchor="start">
-            100% NATURAL PRODUCT
-          </textPath>
-        </text>
-        
-        <!-- Center text -->
-        <text x="100" y="90" font-size="56" font-weight="bold" text-anchor="middle" fill="#8fe388" font-family="Bebas Neue, sans-serif">Hi</text>
-        <text x="100" y="125" font-size="56" font-style="italic" text-anchor="middle" fill="#ffffff" font-family="Trebuchet MS, sans-serif">Buzz</text>
-        
-        <!-- Leaf icon -->
-        <g transform="translate(100, 70)">
-          <path d="M 0,-8 Q 3,-4 3,0 Q 3,4 0,8 Q -3,4 -3,0 Q -3,-4 0,-8" fill="#8fe388"/>
-          <line x1="0" y1="-8" x2="0" y2="8" stroke="#8fe388" stroke-width="0.5"/>
-        </g>
-        
-        <!-- Cannabis text -->
-        <text x="100" y="145" font-size="12" font-weight="bold" text-anchor="middle" fill="#8fe388" font-family="Bebas Neue, sans-serif" letter-spacing="2">CANNABIS</text>
-        
-        <!-- Bottom text ring -->
-        <defs>
-          <path id="innerCircle" d="M 100, 100 m -70, 0 a 70,70 0 1,0 140,0 a 70,70 0 1,0 -140,0" fill="none"/>
-        </defs>
-        <text font-family="Bebas Neue, sans-serif" font-size="13" font-weight="bold" fill="#8fe388" letter-spacing="2" opacity="0.8">
-          <textPath href="#innerCircle" startOffset="50%" text-anchor="middle">
-            Medical dispensary
-          </textPath>
-        </text>
-      </svg>
+      <img src="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Cdefs%3E%3ClinearGradient id=%22grad1%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%22100%25%22%3E%3Cstop offset=%220%25%22 style=%22stop-color:%23000;stop-opacity:1%22 /%3E%3Cstop offset=%22100%25%22 style=%22stop-color:%230a0a0a;stop-opacity:1%22 /%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx=%22100%22 cy=%22100%22 r=%2295%22 fill=%22url(%23grad1)%22 stroke=%22%238fe388%22 stroke-width=%223%22/%3E%3Ccircle cx=%22100%22 cy=%22100%22 r=%2288%22 fill=%22none%22 stroke=%22%234caf50%22 stroke-width=%221%22 opacity=%220.4%22/%3E%3Cpath id=%22outerPath%22 d=%22M 100, 100 m -85, 0 a 85,85 0 1,1 170,0 a 85,85 0 1,1 -170,0%22 fill=%22none%22/%3E%3Ctext font-family=%22Bebas Neue, sans-serif%22 font-size=%2216%22 font-weight=%22bold%22 fill=%22%238fe388%22 letter-spacing=%224%22 opacity=%220.9%22%3E%3CtextPath href=%22%23outerPath%22 startOffset=%220%25%22 text-anchor=%22start%22%3E100%25 NATURAL PRODUCT%3C/textPath%3E%3C/text%3E%3Ctext x=%22100%22 y=%2290%22 font-size=%2256%22 font-weight=%22bold%22 text-anchor=%22middle%22 fill=%22%238fe388%22 font-family=%22Bebas Neue, sans-serif%22%3EHi%3C/text%3E%3Ctext x=%22100%22 y=%22125%22 font-size=%2256%22 font-style=%22italic%22 text-anchor=%22middle%22 fill=%22%23ffffff%22 font-family=%22Trebuchet MS, sans-serif%22%3EBuzz%3C/text%3E%3Cg transform=%22translate(100, 70)%22%3E%3Cpath d=%22M 0,-8 Q 3,-4 3,0 Q 3,4 0,8 Q -3,4 -3,0 Q -3,-4 0,-8%22 fill=%22%238fe388%22/%3E%3Cline x1=%220%22 y1=%22-8%22 x2=%220%22 y2=%228%22 stroke=%22%238fe388%22 stroke-width=%220.5%22/%3E%3C/g%3E%3Ctext x=%22100%22 y=%22145%22 font-size=%2212%22 font-weight=%22bold%22 text-anchor=%22middle%22 fill=%22%238fe388%22 font-family=%22Bebas Neue, sans-serif%22 letter-spacing=%222%22%3ECANNABIS%3C/text%3E%3Cpath id=%22innerPath%22 d=%22M 100, 100 m -70, 0 a 70,70 0 1,0 140,0 a 70,70 0 1,0 -140,0%22 fill=%22none%22/%3E%3Ctext font-family=%22Bebas Neue, sans-serif%22 font-size=%2213%22 font-weight=%22bold%22 fill=%22%238fe388%22 letter-spacing=%222%22 opacity=%220.8%22%3E%3CtextPath href=%22%23innerPath%22 startOffset=%2250%25%22 text-anchor=%22middle%22%3EMedical dispensary%3C/textPath%3E%3C/text%3E%3C/svg%3E" alt="HiBuzz Logo" style="width:100%;height:100%;border-radius:50%;object-fit:contain;">
     </div>
 
     <h4 class="eyebrow-mark">FEATURED STRAINS</h4>
@@ -1000,64 +961,47 @@
   // Age verification
   function confirmAge() {
     localStorage.setItem('ageVerified', 'true');
-    localStorage.setItem('ageVerificationDate', new Date().toISOString());
-    closeModal('ageVerificationModal');
+    document.getElementById('ageVerificationModal').classList.remove('active');
   }
-
+  
   function declineAge() {
     alert('You must be 21 or older to access this site.');
     window.location.href = 'https://www.google.com';
   }
-
-  function checkAgeVerification() {
-    const verified = localStorage.getItem('ageVerified');
-    if (!verified) {
+  
+  // Check age on page load
+  window.addEventListener('load', function() {
+    if (!localStorage.getItem('ageVerified')) {
       document.getElementById('ageVerificationModal').classList.add('active');
     }
-  }
-
+  });
+  
   // Modal management
   function openModal(modalId) {
     document.getElementById(modalId).classList.add('active');
   }
-
+  
   function closeModal(modalId) {
     document.getElementById(modalId).classList.remove('active');
   }
-
+  
   // Close modal when clicking outside
-  window.onclick = function(event) {
+  window.addEventListener('click', function(event) {
     if (event.target.classList.contains('modal')) {
       event.target.classList.remove('active');
     }
-  }
-
-  // Consent tracking
-  function trackConsent() {
-    const consents = {
-      ageVerification: localStorage.getItem('ageVerified') === 'true',
-      termsAccepted: true,
-      privacyAccepted: true,
-      medicalUse: true,
-      whatsappConsent: true,
-      timestamp: new Date().toISOString()
-    };
-    localStorage.setItem('userConsent', JSON.stringify(consents));
-    return true;
-  }
-
-  // Disable submit button until consent is given
-  function enableSubmit() {
-    const ageVerified = localStorage.getItem('ageVerified');
-    const submitBtn = document.getElementById('submitBtn');
-    if (ageVerified === 'true') {
-      submitBtn.disabled = false;
-    } else {
-      submitBtn.disabled = true;
-    }
-  }
-
-  // ===== STRAIN CAROUSEL =====
+  });
+  
+  // ===== STRAIN CARDS =====
+  
+  // Flip strain cards to reveal price
+  document.querySelectorAll('#strainTrack .strain-card').forEach(card => {
+    card.addEventListener('click', function() {
+      this.querySelector('.card-inner').classList.toggle('flipped');
+    });
+  });
+  
+  // Scroll strain carousel
   function scrollStrains(direction) {
     const track = document.getElementById('strainTrack');
     const scrollAmount = 300;
@@ -1066,64 +1010,28 @@
       behavior: 'smooth'
     });
   }
-
-  // Strain card flip on click
-  document.querySelectorAll('.strain-card').forEach(card => {
-    card.addEventListener('click', function() {
-      const inner = this.querySelector('.card-inner');
-      inner.classList.toggle('flipped');
-    });
-  });
-
+  
   // ===== WHATSAPP INTEGRATION =====
-  const HIBUZZ_WHATSAPP = '27842977786';
-
+  
   function sendViaWhatsApp() {
-    const name = document.getElementById('userName').value;
-    const mobile = document.getElementById('userMobile').value;
     const strainType = document.getElementById('strainType').value;
     const strainName = document.getElementById('strainName').value;
     const moreInfo = document.getElementById('moreInfo').value;
-
-    if (!name || !mobile) {
-      alert('Please fill in your name and mobile number.');
+    const userName = document.getElementById('userName').value;
+    const userMobile = document.getElementById('userMobile').value;
+    
+    if (!strainType || !userName || !userMobile) {
+      alert('Please fill in all required fields.');
       return;
     }
-
-    // Verify age
-    const ageVerified = localStorage.getItem('ageVerified');
-    if (ageVerified !== 'true') {
-      alert('You must confirm you are 21+ before proceeding.');
-      openModal('ageVerificationModal');
-      return;
-    }
-
-    // Final age confirmation
-    const confirmed = confirm('By proceeding, you confirm:\n1. You are 21 years or older\n2. You have read and accept our Terms & Conditions\n3. You consent to our Privacy Policy');
-    if (!confirmed) return;
-
-    // Track consent before sending
-    trackConsent();
-
-    // Build message
-    let message = `Hi HiBuzz! I'd like to inquire about cannabis products.\\n\\n`;
-    message += `Name: ${name}\\n`;
-    message += `Mobile: ${mobile}\\n`;
-    if (strainType) message += `Looking for: ${strainType}\\n`;
-    if (strainName) message += `Strain: ${strainName}\\n`;
-    if (moreInfo) message += `Additional info: ${moreInfo}\\n`;
-
-    // Encode and send to HiBuzz WhatsApp
+    
+    const message = `Hi HiBuzz! I'm interested in the following:\n\nStrain Type: ${strainType}\nStrain Name: ${strainName || 'Not specified'}\nAdditional Info: ${moreInfo || 'None'}\n\nMy Details:\nName: ${userName}\nMobile: ${userMobile}`;
+    
     const encodedMessage = encodeURIComponent(message);
-    const whatsappURL = `https://wa.me/${HIBUZZ_WHATSAPP}?text=${encodedMessage}`;
+    const whatsappURL = `https://wa.me/27842977786?text=${encodedMessage}`;
+    
     window.open(whatsappURL, '_blank');
   }
-
-  // ===== INITIALIZATION =====
-  document.addEventListener('DOMContentLoaded', function() {
-    checkAgeVerification();
-    enableSubmit();
-  });
 </script>
 
 </body>
