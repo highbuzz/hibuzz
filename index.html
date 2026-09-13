@@ -29,6 +29,112 @@
     overflow-x:hidden;
   }
 
+  /* ---- Modal Styles ---- */
+  .modal{
+    display:none;
+    position:fixed;
+    z-index:1000;
+    inset:0;
+    background:rgba(0,0,0,0.8);
+    overflow-y:auto;
+  }
+  .modal.active{ display:flex; align-items:center; justify-content:center; }
+  .modal-content{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:2rem;
+    max-width:600px;
+    max-height:80vh;
+    overflow-y:auto;
+    width:95%;
+  }
+  .modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:1.5rem;
+    border-bottom:1px solid var(--line);
+    padding-bottom:1rem;
+  }
+  .modal-header h2{
+    font-size:1.6rem;
+    margin:0;
+  }
+  .modal-close{
+    background:none;
+    border:none;
+    color:var(--green-bright);
+    font-size:1.8rem;
+    cursor:pointer;
+  }
+  .modal-close:hover{ color:var(--green); }
+  .modal-body{
+    color:var(--text-dim);
+    line-height:1.6;
+    font-size:0.95rem;
+  }
+  .modal-body h3{
+    color:var(--green-bright);
+    margin-top:1.2rem;
+    margin-bottom:0.6rem;
+    font-size:1.1rem;
+  }
+  .modal-body ul, .modal-body ol{
+    margin-left:1.5rem;
+    margin-bottom:0.8rem;
+  }
+  .modal-body li{
+    margin-bottom:0.4rem;
+  }
+  .modal-footer{
+    display:flex;
+    gap:1rem;
+    margin-top:1.5rem;
+    border-top:1px solid var(--line);
+    padding-top:1rem;
+  }
+  .modal-btn{
+    flex:1;
+    padding:0.9rem;
+    border:none;
+    border-radius:8px;
+    font-weight:600;
+    cursor:pointer;
+    font-size:0.95rem;
+  }
+  .modal-btn.accept{
+    background:var(--green);
+    color:#06170a;
+  }
+  .modal-btn.accept:hover{ background:var(--green-bright); }
+  .modal-btn.decline{
+    background:transparent;
+    border:1px solid var(--line);
+    color:var(--text);
+  }
+  .modal-btn.decline:hover{ border-color:var(--green); color:var(--green-bright); }
+
+  .checkbox-group{
+    display:flex;
+    align-items:center;
+    gap:0.8rem;
+    margin:1rem 0;
+    padding:0.8rem;
+    background:rgba(76,175,80,0.05);
+    border-radius:8px;
+  }
+  .checkbox-group input[type="checkbox"]{
+    width:20px;
+    height:20px;
+    cursor:pointer;
+  }
+  .checkbox-group label{
+    cursor:pointer;
+    flex:1;
+    margin:0;
+  }
+
   /* ---- brand logo: faded fixed watermark behind every section ---- */
   .logo-watermark{
     position:fixed;
@@ -415,6 +521,11 @@
     transition:background 0.2s ease;
   }
   .submit-btn:hover{ background:var(--green-bright); }
+  .submit-btn:disabled{
+    background:#666;
+    cursor:not-allowed;
+    opacity:0.6;
+  }
 
   .foot-note{
     margin-top:1.2rem;
@@ -424,6 +535,23 @@
     line-height:1.5;
   }
 
+  .legal-links{
+    display:flex;
+    gap:1rem;
+    justify-content:center;
+    margin-top:1rem;
+    flex-wrap:wrap;
+  }
+  .legal-links button{
+    background:none;
+    border:none;
+    color:var(--green-bright);
+    cursor:pointer;
+    font-size:0.8rem;
+    text-decoration:underline;
+  }
+  .legal-links button:hover{ color:var(--green); }
+
   @media (prefers-reduced-motion: reduce){
     html{ scroll-behavior:auto; }
     .scroll-cue svg{ animation:none; }
@@ -431,6 +559,153 @@
 </style>
 </head>
 <body>
+
+<!-- Age Verification Modal -->
+<div id="ageVerificationModal" class="modal active">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Age Verification</h2>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:1rem; margin-bottom:1.5rem;">
+        HiBuzz is a medical cannabis dispensary. You must be <strong>21 years or older</strong> to enter this site.
+      </p>
+      <p>By entering this site, you confirm that you are of legal age and understand our terms and conditions.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn decline" onclick="declineAge()">I'm Under 21</button>
+      <button class="modal-btn accept" onclick="confirmAge()">I'm 21 or Older</button>
+    </div>
+  </div>
+</div>
+
+<!-- Terms and Conditions Modal -->
+<div id="termsModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Terms & Conditions</h2>
+      <button class="modal-close" onclick="closeModal('termsModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <h3>1. Legal Age Requirement</h3>
+      <p>By using this website, you confirm you are at least 21 years old and comply with all applicable local and national laws regarding cannabis use.</p>
+
+      <h3>2. Medical Use Only</h3>
+      <p>HiBuzz products are intended for medical use only. Users must have valid medical authorization or documentation as required by local law.</p>
+
+      <h3>3. Product Information</h3>
+      <p>All strain information, prices, and availability are provided as-is. We make no warranties regarding the accuracy of product descriptions. Availability is subject to change without notice.</p>
+
+      <h3>4. Liability Disclaimer</h3>
+      <p>HiBuzz is not responsible for any adverse effects, allergies, or reactions to our products. Consult with a healthcare professional before use.</p>
+
+      <h3>5. Prohibited Uses</h3>
+      <p>Products may not be resold, used for commercial purposes, or used in violation of local laws. Users are responsible for compliance with all regulations.</p>
+
+      <h3>6. Communication</h3>
+      <p>By submitting your information via WhatsApp, you consent to receive communications from HiBuzz regarding product inquiries and availability.</p>
+
+      <h3>7. Intellectual Property</h3>
+      <p>All content on this website is owned by HiBuzz and protected by copyright. Unauthorized reproduction is prohibited.</p>
+
+      <h3>8. Changes to Terms</h3>
+      <p>We reserve the right to modify these terms at any time. Your continued use constitutes acceptance of changes.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn accept" onclick="closeModal('termsModal')">I Understand</button>
+    </div>
+  </div>
+</div>
+
+<!-- Privacy Policy Modal -->
+<div id="privacyModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Privacy Policy</h2>
+      <button class="modal-close" onclick="closeModal('privacyModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <h3>1. Information Collection</h3>
+      <p>We collect information you voluntarily provide through our contact form, including name, mobile number, and strain preferences.</p>
+
+      <h3>2. Use of Information</h3>
+      <p>Your information is used solely to:</p>
+      <ul>
+        <li>Respond to your product inquiries</li>
+        <li>Confirm availability</li>
+        <li>Process your WhatsApp request</li>
+      </ul>
+
+      <h3>3. Data Protection</h3>
+      <p>We protect your personal information and do not share it with third parties without your consent, except as required by law.</p>
+
+      <h3>4. WhatsApp Integration</h3>
+      <p>When you submit your information, it is shared with WhatsApp's platform. Review WhatsApp's privacy policy for their data practices.</p>
+
+      <h3>5. Cookies & Tracking</h3>
+      <p>This website uses local storage to remember your preferences and age verification status. No third-party tracking is enabled.</p>
+
+      <h3>6. Your Rights</h3>
+      <p>You have the right to request deletion of your personal information at any time by contacting us via WhatsApp.</p>
+
+      <h3>7. Contact Us</h3>
+      <p>For privacy concerns, contact us at <strong>+27 84 297 7786</strong> via WhatsApp.</p>
+
+      <h3>8. Policy Updates</h3>
+      <p>This privacy policy may be updated at any time. Continued use of the site indicates acceptance.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn accept" onclick="closeModal('privacyModal')">I Understand</button>
+    </div>
+  </div>
+</div>
+
+<!-- Consent & Permissions Modal -->
+<div id="consentModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Permissions & Consent</h2>
+      <button class="modal-close" onclick="closeModal('consentModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <h3>By using this site, you consent to:</h3>
+      
+      <div class="checkbox-group">
+        <input type="checkbox" id="consent1" checked>
+        <label for="consent1">I am 21 years or older and legally authorized to access this site</label>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="consent2" checked>
+        <label for="consent2">I understand this site is for medical cannabis inquiries only</label>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="consent3" checked>
+        <label for="consent3">I authorize HiBuzz to contact me via WhatsApp regarding my inquiry</label>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="consent4" checked>
+        <label for="consent4">I have read and accept the Terms & Conditions</label>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="consent5" checked>
+        <label for="consent5">I have read and accept the Privacy Policy</label>
+      </div>
+
+      <h3>Location Services</h3>
+      <p>This site does not request location permissions. We only use information you voluntarily provide.</p>
+
+      <h3>Data Retention</h3>
+      <p>Your inquiry data is retained for up to 30 days for customer service purposes, then securely deleted.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn accept" onclick="closeModal('consentModal')">I Consent to All</button>
+    </div>
+  </div>
+</div>
 
 <div class="logo-watermark">
   <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -706,18 +981,83 @@
         <input type="tel" id="userMobile" placeholder="+27..." required>
       </div>
 
-      <button type="button" class="submit-btn" onclick="sendViaWhatsApp()">Send my request via WhatsApp</button>
+      <button type="button" class="submit-btn" id="submitBtn" onclick="sendViaWhatsApp()">Send my request via WhatsApp</button>
       
       <p class="foot-note">21+ only. Tapping send opens WhatsApp with your details already filled in — just hit send there to reach us.</p>
+      
+      <div class="legal-links">
+        <button type="button" onclick="openModal('termsModal')">Terms & Conditions</button>
+        <button type="button" onclick="openModal('privacyModal')">Privacy Policy</button>
+        <button type="button" onclick="openModal('consentModal')">Permissions</button>
+      </div>
     </form>
   </div>
 </section>
 
 <script>
-  // HiBuzz WhatsApp number
-  const HIBUZZ_WHATSAPP = '27842977786';
+  // ===== LEGAL & PERMISSIONS =====
+  
+  // Age verification
+  function confirmAge() {
+    localStorage.setItem('ageVerified', 'true');
+    localStorage.setItem('ageVerificationDate', new Date().toISOString());
+    closeModal('ageVerificationModal');
+  }
 
-  // Strain carousel scroll function
+  function declineAge() {
+    alert('You must be 21 or older to access this site.');
+    window.location.href = 'https://www.google.com';
+  }
+
+  function checkAgeVerification() {
+    const verified = localStorage.getItem('ageVerified');
+    if (!verified) {
+      document.getElementById('ageVerificationModal').classList.add('active');
+    }
+  }
+
+  // Modal management
+  function openModal(modalId) {
+    document.getElementById(modalId).classList.add('active');
+  }
+
+  function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('active');
+  }
+
+  // Close modal when clicking outside
+  window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+      event.target.classList.remove('active');
+    }
+  }
+
+  // Consent tracking
+  function trackConsent() {
+    const consents = {
+      ageVerification: localStorage.getItem('ageVerified') === 'true',
+      termsAccepted: true,
+      privacyAccepted: true,
+      medicalUse: true,
+      whatsappConsent: true,
+      timestamp: new Date().toISOString()
+    };
+    localStorage.setItem('userConsent', JSON.stringify(consents));
+    return true;
+  }
+
+  // Disable submit button until consent is given
+  function enableSubmit() {
+    const ageVerified = localStorage.getItem('ageVerified');
+    const submitBtn = document.getElementById('submitBtn');
+    if (ageVerified === 'true') {
+      submitBtn.disabled = false;
+    } else {
+      submitBtn.disabled = true;
+    }
+  }
+
+  // ===== STRAIN CAROUSEL =====
   function scrollStrains(direction) {
     const track = document.getElementById('strainTrack');
     const scrollAmount = 300;
@@ -735,7 +1075,9 @@
     });
   });
 
-  // WhatsApp integration
+  // ===== WHATSAPP INTEGRATION =====
+  const HIBUZZ_WHATSAPP = '27842977786';
+
   function sendViaWhatsApp() {
     const name = document.getElementById('userName').value;
     const mobile = document.getElementById('userMobile').value;
@@ -748,9 +1090,20 @@
       return;
     }
 
-    // Verify age (21+)
-    const confirmed = confirm('By proceeding, you confirm you are 21 years or older.');
+    // Verify age
+    const ageVerified = localStorage.getItem('ageVerified');
+    if (ageVerified !== 'true') {
+      alert('You must confirm you are 21+ before proceeding.');
+      openModal('ageVerificationModal');
+      return;
+    }
+
+    // Final age confirmation
+    const confirmed = confirm('By proceeding, you confirm:\n1. You are 21 years or older\n2. You have read and accept our Terms & Conditions\n3. You consent to our Privacy Policy');
     if (!confirmed) return;
+
+    // Track consent before sending
+    trackConsent();
 
     // Build message
     let message = `Hi HiBuzz! I'd like to inquire about cannabis products.\\n\\n`;
@@ -765,6 +1118,12 @@
     const whatsappURL = `https://wa.me/${HIBUZZ_WHATSAPP}?text=${encodedMessage}`;
     window.open(whatsappURL, '_blank');
   }
+
+  // ===== INITIALIZATION =====
+  document.addEventListener('DOMContentLoaded', function() {
+    checkAgeVerification();
+    enableSubmit();
+  });
 </script>
 
 </body>
